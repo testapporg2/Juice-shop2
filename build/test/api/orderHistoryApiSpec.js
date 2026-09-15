@@ -35,13 +35,23 @@ const globals_1 = require("@jest/globals");
 const config_1 = __importDefault(require("config"));
 const jsonHeader = { 'content-type': 'application/json' };
 const REST_URL = 'http://localhost:3000/rest';
+const getRequiredSecret = (envVar) => {
+    const value = process.env[envVar];
+    if (!value) {
+        throw new Error(`Missing required environment variable: ${envVar}`);
+    }
+    return value;
+};
+const ADMIN_PASSWORD = getRequiredSecret('ADMIN_PASSWORD');
+const JIM_PASSWORD = getRequiredSecret('JIM_PASSWORD');
+const ACCOUNTANT_PASSWORD = getRequiredSecret('ACCOUNTANT_PASSWORD');
 describe('/rest/order-history', () => {
     it('GET own previous orders', () => {
         return frisby.post(REST_URL + '/user/login', {
             headers: jsonHeader,
             body: {
                 email: 'admin@' + config_1.default.get('application.domain'),
-                password: 'admin123'
+                password: ADMIN_PASSWORD
             }
         })
             .expect('status', 200)
@@ -77,7 +87,7 @@ describe('/rest/order-history/orders', () => {
             headers: jsonHeader,
             body: {
                 email: 'jim@' + config_1.default.get('application.domain'),
-                password: 'ncc-1701'
+                password: JIM_PASSWORD
             }
         })
             .expect('status', 200)
@@ -93,7 +103,7 @@ describe('/rest/order-history/orders', () => {
             headers: jsonHeader,
             body: {
                 email: 'admin@' + config_1.default.get('application.domain'),
-                password: 'admin123'
+                password: ADMIN_PASSWORD
             }
         })
             .expect('status', 200)
@@ -109,7 +119,7 @@ describe('/rest/order-history/orders', () => {
             headers: jsonHeader,
             body: {
                 email: 'accountant@' + config_1.default.get('application.domain'),
-                password: 'i am an awesome accountant'
+                password: ACCOUNTANT_PASSWORD
             }
         })
             .expect('status', 200)
@@ -127,7 +137,7 @@ describe('/rest/order-history/:id/delivery-status', () => {
             headers: jsonHeader,
             body: {
                 email: 'admin@' + config_1.default.get('application.domain'),
-                password: 'admin123'
+                password: ADMIN_PASSWORD
             }
         })
             .expect('status', 200)
@@ -146,7 +156,7 @@ describe('/rest/order-history/:id/delivery-status', () => {
             headers: jsonHeader,
             body: {
                 email: 'jim@' + config_1.default.get('application.domain'),
-                password: 'ncc-1701'
+                password: JIM_PASSWORD
             }
         })
             .expect('status', 200)
@@ -165,7 +175,7 @@ describe('/rest/order-history/:id/delivery-status', () => {
             headers: jsonHeader,
             body: {
                 email: 'accountant@' + config_1.default.get('application.domain'),
-                password: 'i am an awesome accountant'
+                password: ACCOUNTANT_PASSWORD
             }
         })
             .expect('status', 200)
