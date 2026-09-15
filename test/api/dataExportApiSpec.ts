@@ -12,13 +12,36 @@ import fs from 'node:fs'
 const jsonHeader = { 'content-type': 'application/json' }
 const REST_URL = 'http://localhost:3000/rest'
 
+const getRequiredEnv = (name: string): string => {
+  const value = process.env[name]
+  if (value == null || value.trim() === '') {
+    throw new Error(`Required test credential environment variable not set: ${name}`)
+  }
+  return value
+}
+
+const credentials = {
+  bjoern: {
+    email: 'bjoern.kimminich@gmail.com',
+    password: getRequiredEnv('BJOERN_TEST_PASSWORD')
+  },
+  amy: {
+    email: 'amy@' + config.get<string>('application.domain'),
+    password: getRequiredEnv('AMY_TEST_PASSWORD')
+  },
+  jim: {
+    email: 'jim@' + config.get<string>('application.domain'),
+    password: getRequiredEnv('JIM_TEST_PASSWORD')
+  }
+}
+
 describe('/rest/user/data-export', () => {
   it('Export data without use of CAPTCHA', () => {
     return frisby.post(REST_URL + '/user/login', {
       headers: jsonHeader,
       body: {
-        email: 'bjoern.kimminich@gmail.com',
-        password: 'bW9jLmxpYW1nQGhjaW5pbW1pay5ucmVvamI='
+        email: credentials.bjoern.email,
+        password: credentials.bjoern.password
       }
     })
       .expect('status', 200)
@@ -44,8 +67,8 @@ describe('/rest/user/data-export', () => {
     return frisby.post(REST_URL + '/user/login', {
       headers: jsonHeader,
       body: {
-        email: 'bjoern.kimminich@gmail.com',
-        password: 'bW9jLmxpYW1nQGhjaW5pbW1pay5ucmVvamI='
+        email: credentials.bjoern.email,
+        password: credentials.bjoern.password
       }
     })
       .expect('status', 200)
@@ -73,8 +96,8 @@ describe('/rest/user/data-export', () => {
     return frisby.post(REST_URL + '/user/login', {
       headers: jsonHeader,
       body: {
-        email: 'bjoern.kimminich@gmail.com',
-        password: 'bW9jLmxpYW1nQGhjaW5pbW1pay5ucmVvamI='
+        email: credentials.bjoern.email,
+        password: credentials.bjoern.password
       }
     })
       .expect('status', 200)
@@ -108,8 +131,8 @@ describe('/rest/user/data-export', () => {
     return frisby.post(REST_URL + '/user/login', {
       headers: jsonHeader,
       body: {
-        email: 'amy@' + config.get<string>('application.domain'),
-        password: 'K1f.....................'
+        email: credentials.amy.email,
+        password: credentials.amy.password
       }
     })
       .expect('status', 200)
@@ -148,8 +171,8 @@ describe('/rest/user/data-export', () => {
     return frisby.post(REST_URL + '/user/login', {
       headers: jsonHeader,
       body: {
-        email: 'jim@' + config.get<string>('application.domain'),
-        password: 'ncc-1701'
+        email: credentials.jim.email,
+        password: credentials.jim.password
       }
     })
       .expect('status', 200)
@@ -190,8 +213,8 @@ describe('/rest/user/data-export', () => {
     return frisby.post(REST_URL + '/user/login', {
       headers: jsonHeader,
       body: {
-        email: 'jim@' + config.get<string>('application.domain'),
-        password: 'ncc-1701'
+        email: credentials.jim.email,
+        password: credentials.jim.password
       }
     })
       .expect('status', 200)
@@ -230,8 +253,8 @@ describe('/rest/user/data-export', () => {
     return frisby.post(REST_URL + '/user/login', {
       headers: jsonHeader,
       body: {
-        email: 'amy@' + config.get<string>('application.domain'),
-        password: 'K1f.....................'
+        email: credentials.amy.email,
+        password: credentials.amy.password
       }
     })
       .expect('status', 200)
@@ -278,8 +301,8 @@ describe('/rest/user/data-export', () => {
     return frisby.post(REST_URL + '/user/login', {
       headers: jsonHeader,
       body: {
-        email: 'jim@' + config.get<string>('application.domain'),
-        password: 'ncc-1701'
+        email: credentials.jim.email,
+        password: credentials.jim.password
       }
     })
       .expect('status', 200)
@@ -328,8 +351,8 @@ describe('/rest/user/data-export', () => {
     return frisby.post(REST_URL + '/user/login', {
       headers: jsonHeader,
       body: {
-        email: 'jim@' + config.get<string>('application.domain'),
-        password: 'ncc-1701'
+        email: credentials.jim.email,
+        password: credentials.jim.password
       }
     })
       .expect('status', 200)
